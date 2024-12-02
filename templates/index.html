@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradutor de Artigos</title>
+</head>
+<body>
+    <h1>Tradutor de Artigos</h1>
+    <form id="translateForm">
+        <label for="url">URL do Artigo:</label>
+        <input type="text" id="url" name="url" required>
+        <br>
+        <label for="lang">Idioma para Tradução:</label>
+        <input type="text" id="lang" name="lang" required>
+        <br><br>
+        <button type="submit">Traduzir</button>
+    </form>
+    <h2>Texto Traduzido:</h2>
+    <div id="translatedText"></div>
+
+    <script>
+        document.getElementById('translateForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const url = document.getElementById('url').value;
+            const lang = document.getElementById('lang').value;
+
+            fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url, lang })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('translatedText').innerText = data.translatedText;
+            })
+            .catch(error => {
+                document.getElementById('translatedText').innerText = 'Erro ao traduzir.';
+            });
+        });
+    </script>
+</body>
+</html>
